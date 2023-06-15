@@ -57,7 +57,9 @@ func main() {
 	v1router.Get("/healthz", handlerReadiness)
 	v1router.Get("/err", handlerErr)
 	v1router.Post("/users", apiCfg.handerCreateUser)
-
+	v1router.Get("/users", apiCfg.middlewareAuth(apiCfg.handlerGetUser))
+	v1router.Post("/feeds", apiCfg.middlewareAuth(apiCfg.handlerCreateFeed))
+	v1router.Get("/feeds", apiCfg.handlerGetFeeds)
 	router.Mount("/v1", v1router)
 
 	srv := &http.Server{
@@ -72,6 +74,4 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	
 }

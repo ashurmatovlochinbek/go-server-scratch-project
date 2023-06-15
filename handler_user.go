@@ -6,7 +6,6 @@ import (
 	"net/http"
 	"rssagg/internal/database"
 	"time"
-
 	"github.com/google/uuid"
 )
 
@@ -38,5 +37,10 @@ func (apiCfg *apiConfig) handerCreateUser(w http.ResponseWriter, r *http.Request
 		return
 	}
 
-	responseWithJSON(w, 200, databaseUsertoUser(user))
+	responseWithJSON(w, 201, databaseUsertoUser(user))
 }	
+
+
+func (apiCfg *apiConfig) handlerGetUser (w http.ResponseWriter, r *http.Request, user database.User) {
+	responseWithJSON(w, 200, databaseUsertoUser(user))
+}
