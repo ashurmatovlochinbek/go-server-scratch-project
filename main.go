@@ -6,11 +6,12 @@ import (
 	"net/http"
 	"os"
 	"rssagg/internal/database"
+	"time"
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/cors"
 	"github.com/joho/godotenv"
-	_ "github.com/lib/pq" 
+	_ "github.com/lib/pq"
 )
 
 type apiConfig struct {
@@ -18,7 +19,6 @@ type apiConfig struct {
 }
 
 func main() {
-	
 	godotenv.Load(".env")
 
 	portString := os.Getenv("PORT")
@@ -37,10 +37,12 @@ func main() {
 		log.Fatal("Can't connect to database: ", error)
 	}
 
+	db := database.New(conn)
 	apiCfg := apiConfig {
-		DB: database.New(conn),
+		DB: db,
 	}
 
+	go startScraping(db, 10, time.Minute)
 
 
 	router := chi.NewRouter()
